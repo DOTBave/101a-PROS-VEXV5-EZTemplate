@@ -2,11 +2,11 @@
 
 // Update these values to match the robot.
 ez::Drive chassis(
-    {1, 2},     // Left drive ports
-    {-3, -4},   // Right drive ports (negative reverses the motor)
-    5,          // IMU port
-    4.125,      // Drive wheel diameter in inches
-    200);       // Drive wheel RPM
+    {1},        // Left drive port
+    {-2},       // Right drive port (negative reverses the motor)
+    11,          // IMU port
+    3.25,      // Drive wheel diameter in inches
+    200);       // Motor cartridge RPM
 
 void initialize() {
   ez::ez_template_print();
