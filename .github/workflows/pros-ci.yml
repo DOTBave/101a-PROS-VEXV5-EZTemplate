@@ -1,0 +1,56 @@
+name: PROS Build Check
+
+on:
+  push:
+    branches: ["dev", "master"]
+  pull_request:
+    branches: ["dev", "master"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  TOOLCHAIN_VERSION: 13.3.rel1
+  TOOLCHAIN_NAME: arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi
+
+jobs:
+  build:
+    name: Build (${{ github.ref_name }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Restore Arm GNU Toolchain from cache
+        id: toolchain-cache
+        uses: actions/cache@v6
+        with:
+          path: ~/arm-toolchain
+          key: ${{ runner.os }}-${{ env.TOOLCHAIN_NAME }}
+
+      - name: Install Arm GNU Toolchain
+        if: steps.toolchain-cache.outputs.cache-hit != 'true'
+        run: |
+          wget -q --tries=3 --timeout=120 \
+            "https://developer.arm.com/-/media/Files/downloads/gnu/${TOOLCHAIN_VERSION}/binrel/${TOOLCHAIN_NAME}.tar.xz"
+          mkdir -p "$HOME/arm-toolchain"
+          tar -xf "${TOOLCHAIN_NAME}.tar.xz" -C "$HOME/arm-toolchain" --strip-components=1
+
+      - name: Build
+        run: |
+          export PATH="$HOME/arm-toolchain/bin:$PATH"
+          arm-none-eabi-g++ --version | head -n 1
+          make clean
+          make -j"$(nproc)" quick
+
+      - name: Report firmware sizes
+        run: |
+          export PATH="$HOME/arm-toolchain/bin:$PATH"
+          arm-none-eabi-size bin/cold.package.elf bin/hot.package.elf
