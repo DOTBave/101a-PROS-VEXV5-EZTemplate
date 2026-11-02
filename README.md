@@ -1,6 +1,9 @@
 # 101A VEX V5 Code
 
-[![Build](https://github.com/DOTBave/101a-PROS-VEXV5-EZTemplate/actions/workflows/pros-ci.yml/badge.svg?branch=dev)](https://github.com/DOTBave/101a-PROS-VEXV5-EZTemplate/actions)
+| Branch | Status |
+| :--- | :--- |
+| `master` | [![Build](https://github.com/DOTBave/101a-PROS-VEXV5-EZTemplate/actions/workflows/pros-ci.yml/badge.svg?branch=master)](https://github.com/DOTBave/101a-PROS-VEXV5-EZTemplate/actions/workflows/pros-ci.yml?query=branch%3Amaster) |
+| `dev` | [![Build](https://github.com/DOTBave/101a-PROS-VEXV5-EZTemplate/actions/workflows/pros-ci.yml/badge.svg?branch=dev)](https://github.com/DOTBave/101a-PROS-VEXV5-EZTemplate/actions/workflows/pros-ci.yml?query=branch%3Adev) |
 
 Starter code for our V5 robot: PROS 4.1.1 + EZ-Template 3.2.2, four drive motors, tank control.
 
