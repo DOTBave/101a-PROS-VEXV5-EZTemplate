@@ -42,7 +42,23 @@ void opcontrol() {
   chassis.drive_brake_set(MOTOR_BRAKE_COAST);
 
   while (true) {
-    chassis.opcontrol_tank();
+    // this if statement ensures that the autonomous selector can only be used when the robot is not connected to the field control system
+    // if macros get called during the driver control period, it's an automatic DQ!!
+    if (!pros::competition::is_connected()) {
+      // these if statements allows the user to page up and down through the autonomous selector
+      // and select an autonomous with the A button
+      if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT)) {
+        ez::as::page_down();
+      } else if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_RIGHT)) {
+        ez::as::page_up();
+      }
+      else if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A)) {
+        autonomous();
+        chassis.drive_brake_set(MOTOR_BRAKE_COAST);
+      }
+    }
+    // chassis.opcontrol_tank(); // this is for tank control
+    chassis.opcontrol_arcade_standard(ez::SINGLE); // this is for arcade control
     pros::delay(ez::util::DELAY_TIME);
   }
 }
