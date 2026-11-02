@@ -30,11 +30,12 @@ void turn_right() {
 }
 
 void drive_square() {
-  for (int i = 0; i < 4; i++) {
+  for (int i = 1; i <= 4; i++) {
     chassis.pid_drive_set(24_in, DRIVE_SPEED, true);
     chassis.pid_wait();
 
-    chassis.pid_turn_set(90_deg, TURN_SPEED);
+    // Targets 90 deg, then 180 deg, then 270 deg, then 360/0 deg
+    chassis.pid_turn_set(90_deg * i, TURN_SPEED);
     chassis.pid_wait();
   }
 }
